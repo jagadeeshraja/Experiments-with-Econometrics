@@ -1,7 +1,7 @@
 ############################
 #                         ##           
 # R Jagadeesh, IIT Kanpur ##         
-#						  ##	   
+#						              ##	   
 ############################
 
 ##The Frisch–Waugh–Lovell (FWL) theorem is of great practical importance for econometrics. 
