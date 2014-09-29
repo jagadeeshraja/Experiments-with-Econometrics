@@ -1,7 +1,6 @@
 ############################################################################################
 #
-#  Bayesian logistic regression
-rm(list=ls())
+#  Bayesian logistic regression implementation in R
 prior = function(a,b){dnorm(a,m0[1],D0[1])*dnorm(b,m0[2],D0[2])}
 like  = function(a,b){prod(exp((a+b*tc)*y)/(1+exp(a+b*tc)))}
 fun   = function(b){prior(b)*like(b)}
@@ -16,19 +15,6 @@ tc   = t - tbar
 m0 = c(0,0)
 C0 = c(10,10)
 D0 = sqrt(C0)
-
-# Plotting the data
-# -----------------
-pdf(file="oring.pdf",width=12,height=6)
-plot(t,y,xlab="Temperature (in Fahrenheit)",ylab="O-ring failure",xlim=c(20,100),axes=FALSE,pch=16)
-axis(2,at=c(0,1))
-axis(1)
-box()
-text(70,0.95,"2")
-text(67,0.05,"3")
-text(70,0.05,"2")
-text(76,0.05,"2")
-dev.off()
 
 # Prior density and likelihood function
 # -------------------------------------
@@ -46,7 +32,6 @@ for (i in 1:N){
   }
 }
 
-pdf(file="priorlike-oring.pdf",width=10,height=6)
 par(mfrow=c(1,2))
 image(as,bs,p,xlab=expression(beta[0]),ylab=expression(beta[1]))
 contour(as,bs,l,xlab=expression(beta[0]),ylab=expression(beta[1]),drawlabels=FALSE,add=TRUE)
@@ -54,7 +39,6 @@ title("Prior vs likelihood")
 image(as,bs,l,xlab=expression(beta[0]),ylab=expression(beta[1]))
 contour(as,bs,po,xlab=expression(beta[0]),ylab=expression(beta[1]),drawlabels=FALSE,add=TRUE)
 title("Likelihood vs posterior")
-dev.off()
 
 # Sampling from p(beta|y) by SIR
 # ------------------------------
@@ -71,7 +55,6 @@ ind     = sample(1:M,size=M1,replace=TRUE,prob=w)
 as2  = as1[ind]
 bs2  = bs1[ind]
 
-pdf(file="priorpost-oring.pdf",width=10,height=6)
 par(mfrow=c(1,2))
 plot(as1,bs1,xlim=range(as),ylim=range(bs),pch=16,xlab=expression(beta[0]),ylab=expression(beta[1]))
 contour(as,bs,p,add=TRUE,col=2,lwd=2,drawlabels=FALSE)
@@ -79,13 +62,10 @@ title("Prior")
 plot(as2,bs2,xlim=range(as),ylim=range(bs),pch=16,xlab=expression(beta[0]),ylab=expression(beta[1]))
 contour(as,bs,po,add=TRUE,col=2,lwd=2,drawlabels=FALSE)
 title("Posterior")
-dev.off()
 
-pdf(file="post-oring.pdf",width=10,height=6)
 par(mfrow=c(1,2))
 hist(as2,breaks=seq(min(as2),max(as2),length=25),main=expression(beta[0]),xlab="",prob=TRUE)
 hist(bs2,breaks=seq(min(bs2),max(bs2),length=20),main=expression(beta[1]),xlab="",prob=TRUE)
-dev.off()
 
 # Posterior summaries
 # -------------------
@@ -105,7 +85,6 @@ for (i in 1:nt){
 }
 quants = apply(pp,2,quantile,c(0.05,0.5,0.95))
 
-pdf(file="pred-oring.pdf",width=9,height=6)
 par(mfrow=c(1,1))
 plot(ts+tbar,quants[2,],ylab="Probability of failure",
      xlab="Temperature (in Fahrenheit)",ylim=range(quants),type="l")
@@ -116,7 +95,6 @@ points(31,quants[1,23],col=2,pch=16)
 points(31,quants[2,23],col=2,pch=16)
 points(31,quants[3,23],col=2,pch=16)
 abline(v=31,col=2)
-dev.off()
 
 quantile(pp[,23],c(0.025,0.5,0.975))
 
