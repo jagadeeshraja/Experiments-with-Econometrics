@@ -1,4 +1,6 @@
-############################################################################################
+############################
+# R Jagadeesh, IIT Kanpur ##
+############################
 #
 #  Bayesian logistic regression implementation in R
 prior = function(a,b){dnorm(a,m0[1],D0[1])*dnorm(b,m0[2],D0[2])}
